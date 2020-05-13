@@ -84,7 +84,7 @@ class SocialGraph:
                     return path
                 visited.add(cv)
                 for friend in self.friendships[cv]:
-                    new_path = [* path]
+                    new_path =  list(path)
                     new_path.append(friend)
                     ptv.enqueue(new_path)
 
