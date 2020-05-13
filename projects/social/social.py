@@ -70,37 +70,23 @@ class SocialGraph:
             self.add_friendship(friendship[0], friendship[1])
 
     def bfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing the shortest path from
-        starting_vertex to destination_vertex in
-        breath-first order.
-        """
-        # create an empty queue
-        q = Queue()
-        # enqueue path to the starting vertex
-        q.enqueue([starting_vertex])
-        # create a set to track vertices we have visited
+        
+        ptv = Queue()
+        ptv.enqueue([starting_vertex])
+        
         visited = set()
-        # while the queue is not empty
-        while q.size() > 0:
-            # dequeue the first path
-            current_path = q.dequeue()
-            # get last vertex from the path
-            last_vertex = current_path[-1]
-            # if vertex has not been visited:
-            if last_vertex not in visited:
-                # check the destination
-                if last_vertex == destination_vertex:
-                    return current_path
-                # mark is as visited
-                visited.add(last_vertex)
-                # add a path to its neighbors to the back of the queue
-                for v in self.friendships[last_vertex]:
-                    # clone path
-                    new_path = [*current_path]
-                # add neighbor to the back of the queue
-                    new_path.append(v)
-                    q.enqueue(new_path)
+        
+        while ptv.size() > 0:
+            path = ptv.dequeue()
+            cv = path[-1]
+            if cv not in visited:
+                if cv == destination_vertex:
+                    return path
+                visited.add(cv)
+                for friend in self.friendships[cv]:
+                    new_path = [* path]
+                    new_path.append(friend)
+                    ptv.enqueue(new_path)
 
 
     def get_all_social_paths(self, user_id):
