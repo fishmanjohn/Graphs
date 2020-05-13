@@ -1,3 +1,7 @@
+import random
+from util import Queue
+from graph import Graph
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -28,6 +32,7 @@ class SocialGraph:
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
 
+
     def populate_graph(self, num_users, avg_friendships):
         """
         Takes a number of users and an average number of friendships
@@ -45,8 +50,44 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for user in range(num_users):
+            self.add_user(user)
 
         # Create friendships
+        friendships = []
+        for user in range(1, self.last_id + 1):
+            for friend in range(user + 1, num_users):
+                friendships.append((user, friend))
+        random.shuffle(friendships)
+
+        #grab the first N elements form the list
+        total_friendships = num_users * avg_friendships
+        pairs_needed = total_friendships // 2
+        random_friendships = friendships[:pairs_needed]
+
+        #create friendships
+        for friendship in random_friendships:
+            self.add_friendship(friendship[0], friendship[1])
+
+    def bfs(self, starting_vertex, destination_vertex):
+        
+        ptv = Queue()
+        ptv.enqueue([starting_vertex])
+        
+        visited = set()
+        
+        while ptv.size() > 0:
+            path = ptv.dequeue()
+            cv = path[-1]
+            if cv not in visited:
+                if cv == destination_vertex:
+                    return path
+                visited.add(cv)
+                for friend in self.friendships[cv]:
+                    new_path =  list(path)
+                    new_path.append(friend)
+                    ptv.enqueue(new_path)
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,6 +100,8 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        for user in self.users:
+            visited[user] = self.bfs(user_id, user)
         return visited
 
 
