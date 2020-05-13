@@ -78,10 +78,11 @@ def earliest_ancestor(ancestors, starting_node):
         return -1
 
     # find longest path or largest vertx  value and set that to start path
-    #print(paths)
+    print(paths)
     start_path = paths[0]
     for path in paths:
         if len(path) > len(start_path) or len(start_path) and path[0] < start_path[0]:
             start_path = path
-    #
+    #return only the oldest verticy
+    print(start_path[0])
     return start_path[0]
